@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {TicketmasterEvent} from '../../services/ticketmaster/models/ticketmaster-event';
 
 @Component({
@@ -9,4 +9,5 @@ import {TicketmasterEvent} from '../../services/ticketmaster/models/ticketmaster
 })
 export class EventsListComponent {
   @Input() events!: TicketmasterEvent[];
+  @Output() eventSelected = new EventEmitter<TicketmasterEvent>();
 }

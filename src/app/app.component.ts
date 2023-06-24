@@ -11,6 +11,7 @@ import {TicketmasterEvent} from './services/ticketmaster/models/ticketmaster-eve
 export class AppComponent implements OnDestroy {
   isLoading = false;
   events: TicketmasterEvent[] = [];
+  selectedEvent: TicketmasterEvent | undefined;
 
   private subscription = new Subscription();
 
@@ -26,7 +27,7 @@ export class AppComponent implements OnDestroy {
       .searchEvents({
         lat: position.lat,
         long: position.long,
-        radius: 200,
+        radius: 5,
       })
       .pipe(
         finalize(() => {
@@ -38,5 +39,9 @@ export class AppComponent implements OnDestroy {
         // TODO Enrique: Handle error
       });
     this.subscription.add(subscription);
+  }
+
+  focusEvent(event: TicketmasterEvent) {
+    this.selectedEvent = event;
   }
 }

@@ -1,3 +1,3 @@
 <div style="padding: 0 20px">
-  <nid-events-list-item *ngFor="let event of events" [event]="event"></nid-events-list-item>
+  <nid-events-list-item *ngFor="let event of events" [event]="event" (eventSelected)="eventSelected.emit(event)"></nid-events-list-item>
 </div>

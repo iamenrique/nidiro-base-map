@@ -12,9 +12,9 @@
 <mat-drawer-container class="nid-container">
   <mat-drawer mode="side" opened>
     <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-    <nid-details-section [events]="events" />
+    <nid-details-section [events]="events" (eventSelected)="focusEvent($event)" />
   </mat-drawer>
   <mat-drawer-content>
-    <nid-map (areaMoved)="requestEventsOnArea($event)" />
+    <nid-map (areaMoved)="requestEventsOnArea($event)" [eventToHighlight]="selectedEvent" />
   </mat-drawer-content>
 </mat-drawer-container>

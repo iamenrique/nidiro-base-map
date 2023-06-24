@@ -8,9 +8,9 @@
   <img mat-card-sm-image [ngSrc]="event.images[0].url" [width]="event.images[0].width" [height]="event.images[0].height" />
   <mat-card-content>
     <p>{{ event.info }}</p>
+    <mat-divider></mat-divider>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
+    <button mat-button (click)="highlightInMap()">{{ 'showInMap' | translate | uppercase }}</button>
   </mat-card-actions>
 </mat-card>

@@ -8,10 +8,12 @@ import {EventsListComponent} from './events-list/events-list.component';
 import {EventsListItemComponent} from './events-list-item/events-list-item.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
+import {MatListModule} from '@angular/material/list';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [DetailsSectionComponent, DetailsSectionControlsComponent, EventsListComponent, EventsListItemComponent],
   exports: [DetailsSectionComponent],
-  imports: [CommonModule, MatSliderModule, FormsModule, MatCardModule, NgOptimizedImage, MatButtonModule],
+  imports: [CommonModule, MatSliderModule, FormsModule, MatCardModule, NgOptimizedImage, MatButtonModule, MatListModule, TranslateModule],
 })
 export class DetailsSectionModule {}
