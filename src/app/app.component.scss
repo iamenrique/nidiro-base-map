@@ -1,0 +1,13 @@
+.nin-container {
+  display: flex;
+  height: 100%;
+
+  .nin-map {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .nin-details {
+    width: 30%;
+  }
+}

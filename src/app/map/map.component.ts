@@ -1,9 +1,13 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Map, View} from 'ol';
+import {Feature, Map, View} from 'ol';
 import {KnownPlaces} from './known-places';
 import {fromLonLat} from 'ol/proj';
 import {OSM} from 'ol/source';
 import TileLayer from 'ol/layer/Tile';
+import VectorSource from 'ol/source/Vector';
+import VectorLayer from 'ol/layer/Vector';
+import {Circle, Point} from 'ol/geom';
+import {Style} from 'ol/style';
 
 @Component({
   selector: 'nid-map',
@@ -17,7 +21,6 @@ export class MapComponent implements AfterViewInit {
   @ViewChild('mapEl') mapEl: ElementRef<HTMLDivElement> | undefined;
 
   ngAfterViewInit() {
-    console.log('\x1B[46;97m>>>>>>', this.mapEl);
     const initialPosition = KnownPlaces.MexicoCity;
     this.olMap = new Map({
       view: new View({
@@ -31,6 +34,18 @@ export class MapComponent implements AfterViewInit {
         }),
       ],
       target: this.mapEl?.nativeElement,
+    });
+    const featureOverlay = new VectorLayer({
+      source: new VectorSource(),
+      map: this.olMap,
+    });
+    const areaFeature = new Feature({
+      geometry: new Circle(fromLonLat(initialPosition.lonLat), 500),
+    });
+    featureOverlay.getSource()?.addFeature(areaFeature);
+
+    this.olMap.on('singleclick', (ev) => {
+      areaFeature.getGeometry()?.setCenter(ev.coordinate);
     });
   }
 }
