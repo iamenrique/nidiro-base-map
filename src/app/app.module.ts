@@ -9,6 +9,7 @@ import {TranslationService} from './services/translation/translation.service';
 import {MapModule} from './map/map.module';
 import {DetailsSectionModule} from './details-section/details-section.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 export function createLocaleIdFactory(translationService: TranslationService) {
   return translationService.currentLanguageCode || AppSettings.defaultLanguageCode;
@@ -23,6 +24,7 @@ export function createLocaleIdFactory(translationService: TranslationService) {
     MapModule,
     DetailsSectionModule,
     BrowserAnimationsModule,
+    MatProgressBarModule,
   ],
   providers: [
     {

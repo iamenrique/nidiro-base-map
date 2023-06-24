@@ -1,13 +1,12 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import {Feature, Map, View} from 'ol';
 import {KnownPlaces} from './known-places';
-import {fromLonLat} from 'ol/proj';
+import {fromLonLat, toLonLat} from 'ol/proj';
 import {OSM} from 'ol/source';
 import TileLayer from 'ol/layer/Tile';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
-import {Circle, Point} from 'ol/geom';
-import {Style} from 'ol/style';
+import {Circle} from 'ol/geom';
 
 @Component({
   selector: 'nid-map',
@@ -17,6 +16,8 @@ import {Style} from 'ol/style';
 })
 export class MapComponent implements AfterViewInit {
   private olMap: Map | undefined;
+
+  @Output() areaMoved = new EventEmitter<{lat: number; long: number}>();
 
   @ViewChild('mapEl') mapEl: ElementRef<HTMLDivElement> | undefined;
 
@@ -46,6 +47,8 @@ export class MapComponent implements AfterViewInit {
 
     this.olMap.on('singleclick', (ev) => {
       areaFeature.getGeometry()?.setCenter(ev.coordinate);
+      const lonLat = toLonLat(ev.coordinate);
+      this.areaMoved.emit({long: lonLat[0], lat: lonLat[1]});
     });
   }
 }

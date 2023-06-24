@@ -1,9 +1,10 @@
 <div class="nin-container">
   <div class="nin-map">
-    <nid-map />
+    <nid-map (areaMoved)="requestEventsOnArea($event)" />
   </div>
 
   <div class="nin-details">
+    <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
     <nid-details-section />
   </div>
 </div>
