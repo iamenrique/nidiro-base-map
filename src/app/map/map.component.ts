@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -34,6 +35,8 @@ export class MapComponent implements OnChanges, AfterViewInit {
   @Output() areaMoved = new EventEmitter<{lat: number; long: number}>();
 
   @ViewChild('mapEl') mapEl: ElementRef<HTMLDivElement> | undefined;
+
+  constructor(private changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
     const eventToHighlightChange = changes['eventToHighlight'];
@@ -78,7 +81,7 @@ export class MapComponent implements OnChanges, AfterViewInit {
     if (!location) return;
     this.featureOverlay?.getSource()?.addFeature(
       new Feature({
-        geometry: new Point([+location.longitude, +location.latitude]),
+        geometry: new Point(fromLonLat([+location.longitude, +location.latitude])),
       })
     );
   }
