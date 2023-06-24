@@ -1,6 +1,5 @@
-<nid-details-section-controls (areaSizeChanged)="areaSizeModified($event)" />
+<div class="nid-details-section-wrapper">
+  <nid-details-section-controls (areaSizeChanged)="areaSizeModified($event)" />
 
-<p>
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus autem, dolore dolorem esse expedita iusto laboriosam magnam molestias
-  nesciunt, nulla placeat quam quo, sunt? Commodi expedita ipsam laudantium odio similique!
-</p>
+  <nid-events-list [events]="events"></nid-events-list>
+</div>

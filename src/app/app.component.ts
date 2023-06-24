@@ -1,6 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {TicketmasterApiService} from './services/ticketmaster/ticketmaster-api.service';
 import {finalize, Subscription} from 'rxjs';
+import {TicketmasterEvent} from './services/ticketmaster/models/ticketmaster-event';
 
 @Component({
   selector: 'nid-root',
@@ -9,6 +10,7 @@ import {finalize, Subscription} from 'rxjs';
 })
 export class AppComponent implements OnDestroy {
   isLoading = false;
+  events: TicketmasterEvent[] = [];
 
   private subscription = new Subscription();
 
@@ -19,7 +21,6 @@ export class AppComponent implements OnDestroy {
   }
 
   requestEventsOnArea(position: {lat: number; long: number}) {
-    console.log('\x1B[46;97m>>>>>>', position);
     this.isLoading = true;
     const subscription = this.ticketmasterApiService
       .searchEvents({
@@ -33,9 +34,7 @@ export class AppComponent implements OnDestroy {
         })
       )
       .subscribe((response) => {
-        response._embedded.events.forEach((r) => {
-          console.log('\x1B[46;97m>>>>>>', r);
-        });
+        this.events = response._embedded.events;
         // TODO Enrique: Handle error
       });
     this.subscription.add(subscription);
