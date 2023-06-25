@@ -5,10 +5,8 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
-  OnChanges,
+  OnDestroy,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {Feature, Map, View} from 'ol';
@@ -19,7 +17,9 @@ import TileLayer from 'ol/layer/Tile';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import {Circle, Point} from 'ol/geom';
+import {CommunicationService} from '../services/communication.service';
 import {TicketmasterEvent} from '../services/ticketmaster/models/ticketmaster-event';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'nid-map',
@@ -27,23 +27,16 @@ import {TicketmasterEvent} from '../services/ticketmaster/models/ticketmaster-ev
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MapComponent implements OnChanges, AfterViewInit {
-  @Input() eventToHighlight: TicketmasterEvent | undefined;
+export class MapComponent implements AfterViewInit, OnDestroy {
   private olMap: Map | undefined;
   private featureOverlay: VectorLayer<VectorSource> | undefined;
+  private subscriptions = new Subscription();
 
   @Output() areaMoved = new EventEmitter<{lat: number; long: number}>();
 
   @ViewChild('mapEl') mapEl: ElementRef<HTMLDivElement> | undefined;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    const eventToHighlightChange = changes['eventToHighlight'];
-    if (eventToHighlightChange) {
-      this.refreshFocusedEvent();
-    }
-  }
+  constructor(private communicationService: CommunicationService) {}
 
   ngAfterViewInit() {
     const initialPosition = KnownPlaces.MexicoCity;
@@ -74,15 +67,29 @@ export class MapComponent implements OnChanges, AfterViewInit {
       const lonLat = toLonLat(ev.coordinate);
       this.areaMoved.emit({long: lonLat[0], lat: lonLat[1]});
     });
+
+    this.watchForEventSelectionChanges();
   }
 
-  private refreshFocusedEvent() {
-    const location = this.eventToHighlight?._embedded.venues[0].location;
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  private refreshFocusedEvent(eventToHighlight: TicketmasterEvent) {
+    const location = eventToHighlight._embedded.venues[0].location;
     if (!location) return;
     this.featureOverlay?.getSource()?.addFeature(
       new Feature({
         geometry: new Point(fromLonLat([+location.longitude, +location.latitude])),
       })
     );
+  }
+
+  private watchForEventSelectionChanges() {
+    const subscription = this.communicationService.watchForSelectionChanges().subscribe((event) => {
+      this.refreshFocusedEvent(event);
+    });
+
+    this.subscriptions.add(subscription);
   }
 }

@@ -9,7 +9,6 @@ import {TicketmasterEvent} from '../services/ticketmaster/models/ticketmaster-ev
 })
 export class DetailsSectionComponent {
   @Input() events!: TicketmasterEvent[];
-  @Output() eventSelected = new EventEmitter<TicketmasterEvent>();
 
   areaSizeModified(areaSize: number) {
     console.log('\x1B[46;97m>>>>>>', areaSize);

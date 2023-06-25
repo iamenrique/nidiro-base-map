@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {TicketmasterEvent} from '../../services/ticketmaster/models/ticketmaster-event';
+import {CommunicationService} from '../../services/communication.service';
 
 @Component({
   selector: 'nid-events-list-item',
@@ -9,9 +10,10 @@ import {TicketmasterEvent} from '../../services/ticketmaster/models/ticketmaster
 })
 export class EventsListItemComponent {
   @Input() event!: TicketmasterEvent;
-  @Output() eventSelected = new EventEmitter<void>();
+
+  constructor(private communicationService: CommunicationService) {}
 
   highlightInMap() {
-    this.eventSelected.emit();
+    this.communicationService.notifySelectionChange(this.event);
   }
 }

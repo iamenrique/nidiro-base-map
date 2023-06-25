@@ -9,5 +9,4 @@ import {TicketmasterEvent} from '../../services/ticketmaster/models/ticketmaster
 })
 export class EventsListComponent {
   @Input() events!: TicketmasterEvent[];
-  @Output() eventSelected = new EventEmitter<TicketmasterEvent>();
 }
